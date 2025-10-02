@@ -1,9 +1,11 @@
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const bodyParser = require("body-parser");
+const cors = require("cors");   // ✅ أضف هذا السطر
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());  // ✅ أضف هذا السطر
 
 // 📌 قاعدة البيانات
 const db = new sqlite3.Database("purchases.db");
