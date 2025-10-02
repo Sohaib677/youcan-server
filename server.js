@@ -5,10 +5,10 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 
-// 📌 نفتح قاعدة البيانات (تتسجّل في ملف purchases.db)
+// 📌 قاعدة البيانات
 const db = new sqlite3.Database("purchases.db");
 
-// 📌 ننشئ جدول إذا ماكانش
+// 📌 إنشاء الجدول إذا ماكانش
 db.run(`
   CREATE TABLE IF NOT EXISTS purchases (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,6 +19,11 @@ db.run(`
 `);
 
 const BLOCK_TIME = 180 * 24 * 60 * 60 * 1000; // 6 شهور بالميلي ثانية
+
+// ✅ Route رئيسي باش ما يبانش Cannot GET /
+app.get("/", (req, res) => {
+  res.send("🚀 Server is running on Render!");
+});
 
 // ✅ API : نتأكدو إذا يقدر يشري
 app.get("/can-purchase", (req, res) => {
@@ -62,7 +67,8 @@ app.post("/order", (req, res) => {
   );
 });
 
-// ✅ نطلقو السيرفر
-app.listen(3000, () => {
-  console.log("🚀 السيرفر راهو يخدم في http://localhost:3000");
+// ✅ نطلقو السيرفر على PORT تاع Render
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 السيرفر راهو يخدم في http://localhost:${PORT}`);
 });
